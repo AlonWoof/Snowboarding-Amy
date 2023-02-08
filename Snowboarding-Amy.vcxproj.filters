@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="helper-functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="decomp-structs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="decomp-pointers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="snowboarding.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbfront0.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbfront1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbjump0.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbwait0.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbwait1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sblstop0.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbrstop0.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbjump1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbleft0.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbright0.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbldamege0.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbrdamege0.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbdown1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbdown2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbdown0.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbsa2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbsb0.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbss0.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbss1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbss2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbsa0.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sbsa1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="a_sboard_snowboard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="snowboarding.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="helper-functions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="amy_snowboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

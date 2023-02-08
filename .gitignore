@@ -1,0 +1,6 @@
+
+*.db
+*.ipch
+.vs/Snowboarding-Amy/v16/.suo
+[Dd]ebug
+Snowboarding-Amy.vcxproj.user
