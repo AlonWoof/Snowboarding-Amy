@@ -5,10 +5,17 @@
 
 #include "snowboarding.h"
 #include "helper-functions.h"
+#include "VictoryFix.h"
 
 int testMotion = 0;
 extern NJS_ACTION* a_snowboard_action[23];
 extern NJS_OBJECT a_sboard_snowboard;
+
+
+
+//00415691 - Amy Call to create task for landing
+//0041565C - Write jump to custom victory code here
+
 
 void testDrawBoard()
 {
@@ -144,14 +151,22 @@ Uint16 PlayerNoTbl[]
 	6
 };
 
-StartPosition AmySnowStartPos = { STAGE_SNOW, 2, {120,375,-40}, 8800 };
+StartPosition AmySnow0StartPos = { STAGE_SNOW, 0, {580, 84, 1074}, 0x8000 };
+StartPosition AmySnow1StartPos = { STAGE_SNOW, 1, {1060, 336, 280}, 0x8000 };
+StartPosition AmySnowStartPos = { STAGE_SNOW, 2, {120,375,-40}, 0x8800 };
+StartPosition AmySandStartPos = { STAGE_SANDBOARD, 0, {1645, -9, 219},  0xC000 };
 
 extern "C"
 {
 	__declspec(dllexport) void Init(const char* path, const HelperFunctions& helperFunctions)
 	{
 		helperFunctions.RegisterStartPosition(Characters_Amy, AmySnowStartPos);
+		helperFunctions.RegisterStartPosition(Characters_Amy, AmySnow0StartPos);
+		helperFunctions.RegisterStartPosition(Characters_Amy, AmySnow1StartPos);
+		helperFunctions.RegisterStartPosition(Characters_Amy, AmySandStartPos);
+
 		InitSnowboarding();
+		SetFinishAction_h.Hook(SetFinishAction_r);
 
 	}
 
@@ -167,8 +182,6 @@ extern "C"
 		if (!LevelClearCounts[PlayerNoTbl[AdvertiseWork_c.PlayerChar] * 43 + STAGE_SNOW])
 			LevelClearCounts[PlayerNoTbl[AdvertiseWork_c.PlayerChar] * 43 + STAGE_SNOW] = 1;
 
-
-
 		if (playertp[0])
 		{
 			if (playertwp[0])
@@ -176,17 +189,6 @@ extern "C"
 				if (CurrentCharacter == Characters_Amy)
 				{
 					AmySnowboardingExec(playertp[0], playermwp[0], playerpwp[0]);
-					//TrialLevels
-					testDrawBoard();
-				}
-
-				if (Controllers[0].PressedButtons & Buttons_Down)
-				{
-					writeParamsToFile();
-					writeMixedParan(Characters_Sonic, Characters_Tails);
-					writeMixedParan(Characters_Sonic, Characters_Amy);
-					writeActionData();
-					PrintDebug("\n\nA\n\n");
 				}
 			}
 		}

@@ -291,6 +291,7 @@ void writeMixedParan(int plno_a, int plno_b)
 }
 
 
+
 DataArray(NJS_ACTION*, s_snowboard_action, 0x3C561B0, 23);
 
 void writeAction(NJS_ACTION * action, ofstream* outfile)

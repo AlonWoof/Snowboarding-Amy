@@ -3,6 +3,8 @@
 
 #include <SADXModLoader.h>
 #include <UsercallFunctionHandler.h>
+#include <FunctionHook.h>
+#include "world-location.h"
 #include "helper-functions.h"
 #include "decomp-pointers.h"
 #include "decomp-structs.h"
@@ -72,9 +74,42 @@ PL_ACTION originalActions[23]
 };
 
 player_parameter originalAmyParams;
-player_parameter AmySnowboardingParams = { 60, 1.75f, 16.0f, 16.0f, 1.525f, 0.55f, 1.48f, 3.0f, 0.23f, 
-0.46f, 1.39f, 2.3f, 3.7f, 5.09f, 0.0445f, 0.0475f, 0.031f, -0.06f, -0.18f, -0.17f, -0.028f, -0.008f, 
--0.01f, -0.4f, -0.1f, -0.6f, -0.31f, 0.3f, 3.5f, 10.0f, 0.06f, 7.0f, 5.0f };
+player_parameter AmySnowboardingParams = 
+{ 
+	60, //jump2_timer
+	2.0f, //pos_error
+	16.0f, //lim_h_spd
+	16.0f, //lim_v_spd
+	3.0f, //max_x_spd
+	0.6f, //max_psh_spd
+	1.66f, //jmp_y_spd
+	3.0f, //nocon_speed
+	0.23f, //slide_speed
+	0.46f, //jog_speed 
+	1.39f, //run_speed
+	2.3f, //rush_speed
+	3.7f, //crash_speed
+	5.09f, //dash_speed 
+	0.076f, //jmp_addit
+	0.05f, //run_accel
+	0.05f, //air_accel
+	-0.06f, //slow_down
+	-0.18f, //run_break
+	-0.17f, //air_break
+	-0.002f, //air_resist_air
+	-0.001f, //air_resist
+	-0.01f, //air_resist_y
+	-0.4f, //air_resist_z
+	-0.1f, //grd_frict
+	-0.6f, //grd_frict_z
+	-0.2825f, //lim_frict
+	0.3f, //rat_bound
+	3.5f, //rad
+	11.0f, //height
+	0.08f, //weight
+	7.0f, //eyes_height
+	5.5f //center_height
+};
 
 enum
 {
@@ -100,13 +135,18 @@ NJS_TEXLIST texlist_a_sboard_snowboard = { textures_a_sboard_snowboard, 1};
 
 UsercallFunc(int, AmyCheckInput, (playerwk* pwp, motionwk2* mwp, taskwk* twp), (pwp, mwp, twp), 0x00487810, rEAX, rECX, rEDI, rESI);
 
+FunctionHook <void, task *> AmyHeadSpikesShake_h(0x485C50);
+FunctionHook <void, task*> AmySkirtShape_h(0x485F40);
+
 const int listStart = 72;
 const int listSize = 23;
 
 bool checky = false;
 
-int lastreq = 0;
-int nextreq = 0;
+WorldLocation dismountPlaces[] =
+{
+	{ STAGE_SNOW, 2, {-3739,-23318,-5539}, 300 }
+};
 
 void __cdecl init_amy_snowboard_action()
 {
@@ -138,6 +178,42 @@ void __cdecl init_amy_snowboard_action()
 		if(a_snowboard_action[i])
 			a_snowboard_action[i]->object = &a_sboard_snowboard;
 	}
+}
+
+
+
+void AmyHeadSpikesShake_r(task * tp)
+{
+
+	taskwk* twp = playertwp[0];
+	playerwk* pwp = playerpwp[0];
+
+	if (twp->mode >= MD_AMY_S8A3_SLID && twp->mode <= MD_AMY_S8A3_CRSH)
+	{
+		AMY_OBJECTS[4]->model = AMY_MODELS[1];
+		return;
+	}
+
+	if (pwp->mj.reqaction == 42)
+	{
+		AMY_OBJECTS[4]->model = AMY_MODELS[1];
+		return;
+	}
+	
+	AmyHeadSpikesShake_h.Original(tp);
+}
+
+void AmySkirtShape_r(task* tp)
+{
+	taskwk * twp = playertwp[0];
+
+	if (twp->mode >= MD_AMY_S8A3_SLID && twp->mode <= MD_AMY_S8A3_CRSH)
+	{
+		
+		return;
+	}
+
+	AmySkirtShape_h.Original(tp);
 }
 
 void DisplayAmySnowBoard(task * tp)
@@ -195,6 +271,29 @@ void DisplayAmySnowBoard(task * tp)
 	}
 }
 
+void AmySBoardSlideSECall(taskwk* twp, playerwk* pwp)
+{
+	unsigned int v3; // r11
+	int v4; // r3
+
+	if (pwp->spd.x >= (double)pwp->p.jog_speed)
+	{
+		if ((((ssStageNumber << STAGE_SNOW) | ssActNumber) & 0xFF00) == 2048)
+		{
+			v3 = pwp->attr;
+			if (v3 == 4)
+				v4 = 225;
+			else
+				v4 = (v3 == 8) + 226;
+		}
+		else
+		{
+			v4 = 729;
+		}
+		PSetLoopSECallForTheMode(v4, twp->counter.b[0], twp->mode);
+	}
+}
+
 void ExecuteAmySnowBoard(task* tp)
 {
 	taskwk* twp = tp->twp;
@@ -213,21 +312,19 @@ void ExecuteAmySnowBoard(task* tp)
 			//ObjectMovableSRegularExecute(a1);
 			twp->pos.y = twp->pos.y - -5.2199998;
 		}
-		DisplayAmySnowBoard(tp);
 	}
 	else
 	{
 		twp->pos = ptwp->cwp->info->center;
-		twp->pos.y += 0.2f;
 		twp->ang.x = ptwp->ang.x;
 		twp->ang.y = 0x8000 - ptwp->ang.y;
 		twp->ang.z = ptwp->ang.z;
 		mwp->spd = pmwp->spd;
 		twp->flag &= 0xF7u;
-		DisplayAmySnowBoard(tp);
+		
 	}
 
-	//DisplayAmySnowBoard(tp);
+	DisplayAmySnowBoard(tp);
 }
 
 void KilledAmySnowBoard(task* tp)
@@ -254,9 +351,19 @@ void AmySnowBoard(task* tp)
 void replacePhysics(int pnum)
 {
 	copyPlayerParameter(&playerwk_default[Characters_Amy], &originalAmyParams);
-	
+	copyPlayerParameter(&playerwk_default[Characters_Sonic], &AmySnowboardingParams);
+
+	AmySnowboardingParams.height = 11.0f;
+	AmySnowboardingParams.weight = 0.08f;
+	AmySnowboardingParams.eyes_height = 7.0f;
+	AmySnowboardingParams.center_height = 5.5f;
+
+
 	copyPlayerParameter(&AmySnowboardingParams, &playerwk_default[Characters_Amy]);
 	copyPlayerParameter(&AmySnowboardingParams, &playerpwp[pnum]->p);
+
+	//copyPlayerParameter(&playerwk_default[Characters_Sonic], &playerwk_default[Characters_Amy]);
+	//copyPlayerParameter(&playerwk_default[Characters_Sonic], &playerpwp[pnum]->p);
 }
 
 void restorePhysics(int pnum)
@@ -300,7 +407,7 @@ int AmyCheckInput_r(playerwk* pwp, motionwk2* mwp, taskwk* twp)
 	{
 
 	case PL_OP_SNOWBOARDING:
-		PrintDebug("\n\n LETS FUCKIN GOOOOOO \n\n");
+		//PrintDebug("\n\n LETS FUCKIN GOOOOOO \n\n");
 		twp->mode = MD_AMY_S8A3_FALL;
 		pwp->mj.reqaction = 75;
 
@@ -333,11 +440,11 @@ int AmyCheckInput_r(playerwk* pwp, motionwk2* mwp, taskwk* twp)
 }
 
 
-
-
 void InitSnowboarding()
 {
 	AmyCheckInput.Hook(AmyCheckInput_r);
+	AmyHeadSpikesShake_h.Hook(AmyHeadSpikesShake_r);
+	AmySkirtShape_h.Hook(AmySkirtShape_r);
 	init_amy_snowboard_action();
 }
 
@@ -375,12 +482,12 @@ Sint32 AmyCheckBeInTheAir(taskwk* twp, playerwk* pwp)
 int AmyCheckInputInSnowBoard(taskwk* twp, motionwk2* mwp, playerwk* pwp)
 {
 
-	if ((twp->flag & 0x1000) == 0)
+	if ((twp->flag & PL_FLAG_INPUT) == 0)
 		return FALSE;
 
 	if (twp->smode == PL_OP_LETITGO)
 	{
-		twp->mode = 12;
+		twp->mode = MD_AMY_FALL;
 		pwp->mj.reqaction = 18;
 		return TRUE;
 	}
@@ -389,8 +496,8 @@ int AmyCheckInputInSnowBoard(taskwk* twp, motionwk2* mwp, playerwk* pwp)
 		return FALSE;
 
 	//AmyThrowTheObjectOut(twp, (motionwk2*)pwp, pwp);
-	twp->mode = 20;
-	pwp->mj.reqaction = 75;
+	twp->mode = MD_AMY_PLON;
+	pwp->mj.reqaction = 42;
 	twp->ang.z = 0;
 	twp->ang.x = 0;
 	PClearSpeed(mwp, pwp);
@@ -401,18 +508,20 @@ int AmyCheckInputInSnowBoard(taskwk* twp, motionwk2* mwp, playerwk* pwp)
 
 void AmySnowboardingCheckMode(taskwk * twp, motionwk2 * mwp, playerwk * pwp)
 {
-	DebugFontSize = 40.0f;
-	njPrint(NJM_LOCATION(30, 30), "AMY REQACTION: %i", pwp->mj.reqaction);
-	njPrint(NJM_LOCATION(30, 31), "AMY SPEED X: %f", pwp->spd.x);
-	
 
-		if (nextreq != pwp->mj.reqaction)
+	if (twp->mode >= MD_AMY_S8A3_SLID && twp->mode <= MD_AMY_S8A3_CRSH)
+	{
+		for (WorldLocation wl : dismountPlaces)
 		{
-			lastreq = nextreq;
-			nextreq = pwp->mj.reqaction;
-			PrintDebug("\n REQACTION AFTER %i: %i", lastreq, nextreq);
-
+			if (isInLocation(&wl))
+			{
+				twp->smode = PL_OP_LETITGO;
+				twp->mode = MD_AMY_FALL;
+				pwp->mj.reqaction = 18;
+				return;
+			}
 		}
+	}
 
 	NJS_POINT3 vs, vd, pos;
 
@@ -457,12 +566,7 @@ void AmySnowboardingCheckMode(taskwk * twp, motionwk2 * mwp, playerwk * pwp)
 					vs.x = 0.0;
 					vs.y = 1.7;
 					vs.z = 3.0;
-					vd.x = 0.0f;
-					vd.y = 0.0f;
-					vd.z = 0.0f;
-					pos.x = 0.0f;
-					pos.y = 0.0f;
-					pos.z = 0.0f;
+
 
 					njPushMatrix(_nj_unit_matrix_);
 					ROTATEX(0, pwp->ttp->twp->ang.x);
@@ -471,16 +575,20 @@ void AmySnowboardingCheckMode(taskwk * twp, motionwk2 * mwp, playerwk * pwp)
 
 					njRotateY(0, 0x8000);
 					njCalcVector(0, &vs, &pos);
-					vs.z = 0.0;
-					vs.x = 0.0;
-					vs.y = 1.0;
+					vs.z = 0.0f;
+					vs.x = 0.0f;
+					vs.y = 1.0f;
 					njCalcVector(0, &vs, &vd);
 
-					SetRotationP(
+					/*SetRotationP(
 						twp->counter.b[0],
-						(asin(vd.z) * (65536.0f * 0.1591549762f)),
-						(atan2(pos.x, pos.z) * (65536.0f * 0.15915497620f)),
-						(asin(vd.x) * (65536.0f * -0.15915497620f)));
+						(asin(vd.z) * 10430.3805202432f),
+						(atan2(pos.x, pos.z) * 10430.3805202432f),
+						(asin(vd.x) * -10430.3805202432f));
+					*/
+
+					SetRotationP(twp->counter.b[0], njArcSin(vd.z), njArcTan2(pos.x, pos.z), -njArcSin(vd.x));
+
 					njPopMatrix(1u);
 					SetAccelerationP(twp->counter.b[0], pos.x, pos.y, pos.z);
 
@@ -492,18 +600,18 @@ void AmySnowboardingCheckMode(taskwk * twp, motionwk2 * mwp, playerwk * pwp)
 							{
 								twp->mode = MD_AMY_S8A3_JUMP;
 								pwp->mj.reqaction = 76;
-								//AddScore(10);
+								AddScore(10);
 							}
 							else
 							{
 								pwp->mj.reqaction = 93;
-								//AddScore(30);
+								AddScore(30);
 							}
 						}
 						else
 						{
 							pwp->mj.reqaction = 90;
-							//AddScore(50);
+							AddScore(50);
 						}
 					}
 					else
@@ -544,8 +652,6 @@ void AmySnowboardingCheckMode(taskwk * twp, motionwk2 * mwp, playerwk * pwp)
 				}
 			}
 
-
-
 			pwp->mj.reqaction = 76;
 			twp->flag &= 0xFFFDu;
 			pwp->jumptimer = 0;
@@ -565,11 +671,56 @@ void AmySnowboardingCheckMode(taskwk * twp, motionwk2 * mwp, playerwk * pwp)
 		{
 			//twp->mode = MD_AMY_S8A3_SLID;
 			//pwp->mj.reqaction = 72;
-			//SonicSBoardSlideSECall(twp, (motionwk2*)pwp, v201);
+			//AmySBoardSlideSECall(twp, pwp);
 		}
 
 		return;
 	case MD_AMY_S8A3_BRAK:
+
+		if (AmyCheckInputInSnowBoard(twp, mwp, pwp))
+			return;
+
+		if (AmyCheckBeInTheAir(twp,pwp))
+		{
+			twp->mode = MD_AMY_S8A3_FALL;
+			pwp->mj.reqaction = 81;
+		}
+		else if ((jump_button & perG[twp->counter.b[0]].release) != 0)
+		{
+			twp->mode = MD_AMY_S8A3_JUMP;
+
+			pwp->spd.y = pwp->p.jmp_y_spd;
+			if (pwp->spd.x < pwp->p.rush_speed)
+			{
+				pwp->spd.x = pwp->p.jog_speed + pwp->spd.x;
+			}
+
+			if (pwp->ttp)
+			{
+				if (pwp->ttp->fwp)
+				{
+					SetAccelerationP(twp->counter.b[0], pwp->ttp->fwp->pos_spd.x, pwp->ttp->fwp->pos_spd.y, pwp->ttp->fwp->pos_spd.z);
+				}
+			}
+
+			pwp->mj.reqaction = 76;
+			twp->flag &= ~PL_FLAG_ONCCL;
+			pwp->jumptimer = 0;
+			dsPlay_oneshot(17, 0, 0, 0);
+		}
+		else if (PCheckBreak(twp) && pwp->spd.x >= pwp->p.jog_speed)
+		{
+			Angle ang;
+			PCheckPower(twp, &ang, 0);
+			pwp->mj.reqaction = (SubAngle(twp->ang.y, ang) <= 0) + 73;
+		}
+		else
+		{
+			twp->mode = MD_AMY_S8A3_SLID;
+			pwp->mj.reqaction = 72;
+			AmySBoardSlideSECall(twp, pwp);
+		}
+
 		return;
 	case MD_AMY_S8A3_FALL:
 
@@ -604,7 +755,7 @@ void AmySnowboardingCheckMode(taskwk * twp, motionwk2 * mwp, playerwk * pwp)
 			}
 			twp->ang.x = mwp->ang_aim.x;
 			twp->ang.z = mwp->ang_aim.z;
-			//MilesSBoardSlideSECall(v113, twp);
+			AmySBoardSlideSECall(twp, pwp);
 		}
 
 		return;
@@ -630,7 +781,7 @@ void AmySnowboardingCheckMode(taskwk * twp, motionwk2 * mwp, playerwk * pwp)
 
 		twp->ang.x = mwp->ang_aim.x;
 		twp->ang.z = mwp->ang_aim.z;
-		//MilesSBoardSlideSECall(_pwp, twp);
+		AmySBoardSlideSECall(twp, pwp);
 		return;
 
 	case MD_AMY_S8A3_SPEC:
@@ -651,7 +802,7 @@ void AmySnowboardingCheckMode(taskwk * twp, motionwk2 * mwp, playerwk * pwp)
 
 		twp->ang.x = mwp->ang_aim.x;
 		twp->ang.z = mwp->ang_aim.z;
-		//MilesSBoardSlideSECall(_pwp, twp);
+		AmySBoardSlideSECall(twp, pwp);
 		return;
 
 	case MD_AMY_S8A3_CRSH:
@@ -663,7 +814,7 @@ void AmySnowboardingCheckMode(taskwk * twp, motionwk2 * mwp, playerwk * pwp)
 			{
 				twp->mode = MD_AMY_S8A3_SLID;
 				pwp->mj.reqaction = 72;
-				//MilesSBoardSlideSECall(v100, twp);
+				AmySBoardSlideSECall(twp, pwp);
 			}
 		}
 		return;
@@ -841,6 +992,8 @@ void AmySnowboardingExec(task * tp, motionwk2 * mwp, playerwk * pwp)
 
 	AmySnowboardingCheckMode(twp, mwp, pwp);
 
+
+
 	switch (twp->mode)
 	{
 
@@ -861,8 +1014,7 @@ void AmySnowboardingExec(task * tp, motionwk2 * mwp, playerwk * pwp)
 			if (((ssStageNumber << 8) | ssActNumber) == 2050)
 			{
 				dsPlay_oneshot(235, 0, 0, 0);
-				//PSetSnowEffect(twp, mwp, pwp);
-				//goto LABEL_230;
+				PSetSnowEffect(twp, mwp, pwp);
 			}
 		}
 		else
@@ -872,8 +1024,9 @@ void AmySnowboardingExec(task * tp, motionwk2 * mwp, playerwk * pwp)
 		}
 		PSetSnowEffect(twp, mwp, pwp);
 		break;
+	case MD_AMY_S8A3_BRAK:
 	case MD_AMY_S8A3_CRSH:
-		//PGetBreakSnowBoard(twp, mwp, pwp);
+		PGetBreakSnowBoard(twp, mwp, pwp);
 		PGetSpeed(twp, mwp, pwp);
 		PSetPosition(twp, mwp, pwp);
 		PResetPosition(twp, mwp, pwp);

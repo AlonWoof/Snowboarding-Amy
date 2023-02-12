@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+#ifndef _DECOMP_STRUCTS_H_
+#define _DECOMP_STRUCTS_H_
+
 #include <SADXModLoader.h>
 
 struct colaround
@@ -81,10 +84,10 @@ struct colaround
 #define PDD_DGT_TC    (1 <<  0)            /* C�{�^��                      */
 										   /* C button                     */
 
-Sint32 jump_button = PDD_DGT_TA;
-Sint32 action_button = (PDD_DGT_TB | PDD_DGT_TX);
-Sint32 camera_button = 0;
-Sint32 hold_button = (PDD_DGT_TB | PDD_DGT_TX);
+const Sint32 jump_button = PDD_DGT_TA;
+const Sint32 action_button = (PDD_DGT_TB | PDD_DGT_TX);
+const Sint32 camera_button = 0;
+const Sint32 hold_button = (PDD_DGT_TB | PDD_DGT_TX);
 
 enum {
 	PSG_TYPE_FLOOR,
@@ -111,3 +114,18 @@ enum {
 	MD_MTN_END
 };
 
+enum {
+	PLNO_SONIC,
+	PLNO_EGGMAN,
+	PLNO_TAILS,
+	PLNO_KNUCKLES,
+	PLNO_TIKAL,
+	PLNO_AMY,
+	PLNO_E102,
+	PLNO_BIG,
+	PLNO_METAL_SONIC,
+	NB_PLNO
+};
+
+
+#endif _DECOMP_STRUCTS_H_

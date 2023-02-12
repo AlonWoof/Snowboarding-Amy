@@ -184,6 +184,8 @@
     <ClInclude Include="helper-functions.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="snowboarding.h" />
+    <ClInclude Include="VictoryFix.h" />
+    <ClInclude Include="world-location.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="amy_snowboard.cpp" />
@@ -196,6 +198,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="snowboarding.cpp" />
+    <ClCompile Include="VictoryFix.cpp" />
+    <ClCompile Include="world-location.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -102,6 +102,12 @@
     <ClInclude Include="a_sboard_snowboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="VictoryFix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="world-location.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -117,6 +123,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="amy_snowboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VictoryFix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="world-location.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

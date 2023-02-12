@@ -6,5 +6,4 @@
 void InitSnowboarding();
 void AmySnowboardingExec(task* tp, motionwk2* mwp, playerwk* pwp);
 
-
 #endif // !_SNOWBOARDING_H_
