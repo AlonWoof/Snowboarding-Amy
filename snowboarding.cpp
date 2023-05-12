@@ -38,6 +38,8 @@
 
 #include "a_sboard_snowboard.h"
 
+bool HiResBoardTexture = false;
+
 
 PL_ACTION AmySnowboard[] =
 {
@@ -425,7 +427,11 @@ void AmySnowBoard(task* tp)
 	twp->timer.l = (int)SONIC_OBJECTS[71];
 	tp->mwp->weight = 0.02;
 	//NeonuLoadTexture(&texlist_a_sboard_snowboard);
-	LoadPVM("ATX_BOARD0", &texlist_a_sboard_snowboard);
+	if(!HiResBoardTexture)
+		LoadPVM("ATX_BOARD0", &texlist_a_sboard_snowboard);
+	else
+		LoadPVM("ATX_BOARD0_HI", &texlist_a_sboard_snowboard);
+
 	tp->dest = KilledAmySnowBoard;
 	tp->exec = ExecuteAmySnowBoard;
 	tp->disp = DisplayAmySnowBoard;

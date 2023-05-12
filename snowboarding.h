@@ -6,4 +6,6 @@
 void InitSnowboarding();
 void AmySnowboardingExec(task* tp, motionwk2* mwp, playerwk* pwp);
 
+extern bool HiResBoardTexture;
+
 #endif // !_SNOWBOARDING_H_

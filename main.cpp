@@ -183,6 +183,7 @@ extern "C"
 
 		const IniFile* config = new IniFile(std::string(path) + "\\config.ini");
 		VictoryFixEnabled = config->getBool("Misc", "VictoryFix", true);
+		HiResBoardTexture = config->getBool("Misc", "HiResBoard", false);
 
 		if(VictoryFixEnabled)
 			SetFinishAction_h.Hook(SetFinishAction_r);
