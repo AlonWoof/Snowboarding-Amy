@@ -172,6 +172,7 @@ void writeParam(string paramName, int param, ofstream* outfile)
 
 void writeParamsToFile()
 {
+	/*
 	taskwk* twp = playertwp[0];
 	playerwk* pwp = playerpwp[0];
 
@@ -228,6 +229,7 @@ void writeParamsToFile()
 	outfile.close();
 
 	printf(path.c_str());
+	*/
 }
 
 
@@ -235,7 +237,7 @@ void writeMixedParan(int plno_a, int plno_b)
 {
 	//playerwk_default
 
-
+	/*
 	string path = getenv("APPDATA");
 
 	path += "\\..\\..\\Documents\\Alonwoof Productions\\" + CharNames[plno_a] + "_" + CharNames[plno_b] + "_PARAM_DATA.txt";
@@ -288,6 +290,7 @@ void writeMixedParan(int plno_a, int plno_b)
 	outfile.close();
 
 	printf(path.c_str());
+	*/
 }
 
 
@@ -302,6 +305,7 @@ void writeAction(NJS_ACTION * action, ofstream* outfile)
 
 void writeActionData()
 {
+	/*
 	string path = getenv("APPDATA");
 
 	path += "\\..\\..\\Documents\\Alonwoof Productions\\SNOWBOARD_ACTION_DATA.txt";
@@ -327,4 +331,5 @@ void writeActionData()
 	outfile.close();
 
 	printf(path.c_str());
+	*/
 }

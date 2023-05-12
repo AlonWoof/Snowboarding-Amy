@@ -7,5 +7,6 @@
 int SetAmyWinPose();
 extern FunctionHook<void> SetFinishAction_h;
 void SetFinishAction_r();
+extern bool VictoryFixEnabled;
 
 #endif // !_VICTORYFIX_H_

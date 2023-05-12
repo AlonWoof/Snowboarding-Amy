@@ -3,9 +3,14 @@
 *.ipch
 .vs/Snowboarding-Amy/v16/.suo
 [Dd]ebug
+[Rr]elease
 Snowboarding-Amy.vcxproj.user
 .vs/Snowboarding-Amy/v16/Browse.VC.db-shm
 .vs/Snowboarding-Amy/v16/Browse.VC.db-wal
 .vs/Snowboarding-Amy/v16/Browse.VC.opendb
 .vs/Snowboarding-Amy/v16/Solution.VC.db-shm
 .vs/Snowboarding-Amy/v16/Solution.VC.db-wal
+*.obj
+*.pdb
+*.lib
+*.tlog

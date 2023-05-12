@@ -7,6 +7,8 @@
 
 FunctionHook<void> SetFinishAction_h(0x415540);
 
+bool VictoryFixEnabled = true;
+
 typedef struct stageAndAct
 {
 	short stage; 
@@ -41,13 +43,10 @@ void SetLocalPathCamera(pathtag* ptp, int mode, int timer)
 	camera_twp->timer.l = timer;
 	camera_twp->counter.w[1] = 0;
 }
+
 void WaitLandPlayer_Amy(task* tp)
 {
 	taskwk* twp;
-	
-	//= GetPlayerTaskPointer(0)->twp;
-	int v3; // r3
-
 	
 	//if (playertwp[0] && IsReleaseBoxActive() && GetReleaseBoxOpenID() == 1)
 		twp = playertwp[0];

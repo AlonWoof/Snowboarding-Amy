@@ -82,7 +82,7 @@ player_parameter AmySnowboardingParams =
 	2.0f, //pos_error
 	16.0f, //lim_h_spd
 	16.0f, //lim_v_spd
-	3.0f, //max_x_spd
+	5.0f, //max_x_spd
 	0.6f, //max_psh_spd
 	1.66f, //jmp_y_spd
 	3.0f, //nocon_speed
@@ -93,15 +93,15 @@ player_parameter AmySnowboardingParams =
 	3.7f, //crash_speed
 	5.09f, //dash_speed 
 	0.076f, //jmp_addit
-	0.05f, //run_accel
-	0.05f, //air_accel
+	0.08f, //run_accel
+	0.08f, //air_accel
 	-0.06f, //slow_down
 	-0.18f, //run_break
 	-0.17f, //air_break
 	-0.002f, //air_resist_air
 	-0.001f, //air_resist
 	-0.01f, //air_resist_y
-	-0.4f, //air_resist_z
+	-0.3f, //air_resist_z
 	-0.1f, //grd_frict
 	-0.6f, //grd_frict_z
 	-0.2825f, //lim_frict
@@ -146,7 +146,14 @@ const int listSize = 23;
 
 WorldLocation dismountPlaces[] =
 {
-	{ STAGE_SNOW, 2, {-3739,-23318,-5539}, 300 }
+	{ STAGE_SNOW, 2, {-3739,-23318,-5539}, 300 },
+	{ STAGE_SANDBOARD, 0, {1313,-7370,-15270}, 300 }
+};
+
+WorldLocation boostPlaces[] =
+{
+	{ STAGE_SNOW, 2,  {120,375,-40}, 50 },
+	{ STAGE_SANDBOARD, 0, {1645, -9, 219}, 128 }
 };
 
 void __cdecl init_amy_snowboard_action()
@@ -320,6 +327,19 @@ void DisplayAmySnowBoard(task * tp)
 			}
 		}
 	}
+}
+
+bool isInBoostLocation()
+{
+	for (WorldLocation wl : boostPlaces)
+	{
+		if (isInLocation(&wl))
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 bool isInBoardDismountLocation()
@@ -600,6 +620,13 @@ void AmySnowboardingCheckMode(taskwk * twp, motionwk2 * mwp, playerwk * pwp)
 		}
 	}
 
+	if (isInBoostLocation())
+	{
+		//mwp->acc.x = -5.0f;
+		
+		//mwp->spd.x = 10.0f;
+	}
+
 	NJS_POINT3 vs, vd, pos;
 
 	switch (twp->mode)
@@ -820,7 +847,7 @@ void AmySnowboardingCheckMode(taskwk * twp, motionwk2 * mwp, playerwk * pwp)
 				pwp->mj.reqaction = 72;
 				if (pwp->spd.x <= 0.30000001)
 				{
-					pwp->spd.x = 1.0;
+					pwp->spd.x = 2.0;
 				}
 			}
 			else
@@ -845,7 +872,7 @@ void AmySnowboardingCheckMode(taskwk * twp, motionwk2 * mwp, playerwk * pwp)
 			pwp->mj.reqaction = 72;
 			if (pwp->spd.x <= 0.30000001)
 			{
-				pwp->spd.x = 1.0;
+				pwp->spd.x = 2.0f;
 			}
 		}
 		else
@@ -1056,6 +1083,23 @@ void AmyChangeSnowBoardMotion(taskwk * twp, motionwk2 * mwp, playerwk * pwp)
 
 }
 
+
+void detectRandomizer(task* tp, motionwk2* mwp, playerwk* pwp)
+{
+	/*
+	if(!isSnowboardingStage())
+		return;
+
+	taskwk* twp = tp->twp;
+
+	if (twp->mode == MD_AMY_S3A2_CART || twp->smode == PL_OP_PLACEWITHCART)
+	{
+		twp->smode = PL_OP_GETOUTOFCART;
+	}
+	*/
+}
+
+
 void AmySnowboardingExec(task * tp, motionwk2 * mwp, playerwk * pwp)
 {
 
@@ -1063,6 +1107,8 @@ void AmySnowboardingExec(task * tp, motionwk2 * mwp, playerwk * pwp)
 		return;
 
 	taskwk* twp = tp->twp;
+
+	detectRandomizer(tp, mwp, pwp);
 
 	AmySnowboardingCheckMode(twp, mwp, pwp);
 

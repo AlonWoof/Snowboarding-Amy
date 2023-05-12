@@ -122,9 +122,6 @@
     <ClCompile Include="helper-functions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="amy_snowboard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="VictoryFix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

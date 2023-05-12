@@ -2,6 +2,8 @@
 #include "pch.h"
 #include "world-location.h"
 
+//#define DEBUG
+
 bool isInLocation(WorldLocation* wl)
 {
 	if (CurrentLevel == wl->levelID && CurrentAct == wl->act)

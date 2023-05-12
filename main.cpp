@@ -7,10 +7,11 @@
 #include "helper-functions.h"
 #include "VictoryFix.h"
 
+#include "IniFile.hpp"
+
 int testMotion = 0;
 extern NJS_ACTION* a_snowboard_action[23];
 extern NJS_OBJECT a_sboard_snowboard;
-
 
 
 //00415691 - Amy Call to create task for landing
@@ -123,9 +124,22 @@ TrialLevelListEntry newAmyTrialListEntry[]
 	{STAGE_FINAL, 0}
 };
 
+TrialLevelListEntry newAmySubgameListEntry[]
+{
+	{STAGE_NO, 0},
+	{STAGE_MG_CART, 0},
+	{STAGE_EGGMANROBO, 0},
+	{STAGE_SANDBOARD, 0}
+};
+
 TrialLevelList NewAmyTrialList =
 {
 	newAmyTrialListEntry, 4
+};
+
+TrialLevelList NewAmySubgameList =
+{
+	newAmySubgameListEntry, 4
 };
 
 LevelClearFlagData AmyLevelclearflags[] = {
@@ -166,7 +180,12 @@ extern "C"
 		helperFunctions.RegisterStartPosition(Characters_Amy, AmySandStartPos);
 
 		InitSnowboarding();
-		SetFinishAction_h.Hook(SetFinishAction_r);
+
+		const IniFile* config = new IniFile(std::string(path) + "\\config.ini");
+		VictoryFixEnabled = config->getBool("Misc", "VictoryFix", true);
+
+		if(VictoryFixEnabled)
+			SetFinishAction_h.Hook(SetFinishAction_r);
 
 	}
 
@@ -176,11 +195,15 @@ extern "C"
 	{
 
 		TrialLevels[3] = NewAmyTrialList;
+		TrialSubgames[3] = NewAmySubgameList;
 		LevelClearFlagOffsets_correct[Characters_Amy] = AmyLevelclearflags;
 
 
 		if (!LevelClearCounts[PlayerNoTbl[AdvertiseWork_c.PlayerChar] * 43 + STAGE_SNOW])
 			LevelClearCounts[PlayerNoTbl[AdvertiseWork_c.PlayerChar] * 43 + STAGE_SNOW] = 1;
+
+		if (!LevelClearCounts[PlayerNoTbl[AdvertiseWork_c.PlayerChar] * 43 + STAGE_SANDBOARD])
+			LevelClearCounts[PlayerNoTbl[AdvertiseWork_c.PlayerChar] * 43 + STAGE_SANDBOARD] = 1;
 
 		if (playertp[0])
 		{
@@ -189,6 +212,7 @@ extern "C"
 				if (CurrentCharacter == Characters_Amy)
 				{
 					AmySnowboardingExec(playertp[0], playermwp[0], playerpwp[0]);
+					
 				}
 			}
 		}
