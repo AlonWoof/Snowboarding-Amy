@@ -195,6 +195,10 @@ extern "C"
 	__declspec(dllexport) void OnFrame()
 	{
 
+
+		if (CurrentCharacter != Characters_Amy)
+			return;
+
 		TrialLevels[3] = NewAmyTrialList;
 		TrialSubgames[3] = NewAmySubgameList;
 		LevelClearFlagOffsets_correct[Characters_Amy] = AmyLevelclearflags;

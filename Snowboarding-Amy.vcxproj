@@ -23,7 +23,7 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{c8e51431-1890-4deb-846a-1e01a799e141}</ProjectGuid>
     <RootNamespace>SnowboardingAmy</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>7.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -72,15 +72,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Jenny\Documents\Project\SADX\sadx-mod-loader\mod-loader-common\ModLoaderCommon;C:\Users\Jenny\Documents\Project\SADX\sadx-mod-loader\SADXModLoader\include;$(IncludePath)</IncludePath>
-    <OutDir>..\..\..\..\..\..\Program Files %28x86%29\Steam\steamapps\common\Sonic Adventure DX\mods\snowboarding-amy</OutDir>
-    <LibraryPath>C:\Users\Jenny\Documents\Project\SADX\Snowboarding-Amy\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Jennifer\Documents\Project\SADX\sadx-mod-loader\mod-loader-common\ModLoaderCommon;C:\Users\Jennifer\Documents\Project\SADX\sadx-mod-loader\SADXModLoader\include;$(IncludePath)</IncludePath>
+    <OutDir>..\..\..\..\..\..\Program Files %28x86%29\Steam\steamapps\common\Sonic Adventure DX\mods\Snowboarding Amy!</OutDir>
+    <LibraryPath>C:\Users\Jennifer\Documents\Project\SADX\Snowboarding-Amy\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\Jenny\Documents\Project\SADX\sadx-mod-loader\mod-loader-common\ModLoaderCommon;C:\Users\Jenny\Documents\Project\SADX\sadx-mod-loader\SADXModLoader\include;$(IncludePath)</IncludePath>
-    <OutDir>..\..\..\..\..\..\Program Files %28x86%29\Steam\steamapps\common\Sonic Adventure DX\mods\snowboarding-amy</OutDir>
-    <LibraryPath>C:\Users\Jenny\Documents\Project\SADX\Snowboarding-Amy\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Jennifer\Documents\Project\SADX\sadx-mod-loader\mod-loader-common\ModLoaderCommon;C:\Users\Jennifer\Documents\Project\SADX\sadx-mod-loader\SADXModLoader\include;$(IncludePath)</IncludePath>
+    <OutDir>..\..\..\..\..\..\Program Files %28x86%29\Steam\steamapps\common\Sonic Adventure DX\mods\Snowboarding Amy!</OutDir>
+    <LibraryPath>C:\Users\Jennifer\Documents\Project\SADX\Snowboarding-Amy\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>

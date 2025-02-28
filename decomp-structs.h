@@ -5,11 +5,6 @@
 
 #include <SADXModLoader.h>
 
-struct colaround
-{
-	taskwk* twp;
-	float dist;
-};
 
 #define CWK_FLAG_HIT    0x1          /* Currently intersecting another collision */
 #define CWK_FLAG_2      0x2          /* ? */

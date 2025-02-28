@@ -27,12 +27,6 @@ FunctionPointer(void, CameraSnowboardSpecial2, (_OBJ_CAMERAPARAM* pParam), 0x469
 FunctionPointer(void, PSetSnowEffect, (taskwk* twp, motionwk2* mwp, playerwk* pwp), 0x440930);
 FunctionPointer(void, PGetBreakSnowBoard, (taskwk* twp, motionwk2* mwp, playerwk* pwp), 0x00442CE0);
 
-FunctionPointer(void, PResetPosition, (taskwk* twp, motionwk2* mwp, playerwk* pwp), 0x43EE70);
-
-DataArray(colaround, around_enemy_list_p0, 0x03B259C0, 657);
-DataArray(colaround, around_enemy_list_p1, 0x03B242F8, 656);
-DataPointer(unsigned short, ael_num0, 0x3B23288);
-DataPointer(unsigned short, ael_num1, 0x3B240A8);
 
 DataPointer(unsigned short, ssPauseEnable, 0x0090BF1C);
 
